@@ -5,34 +5,49 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Compose from "./pages/Compose";
+import Posts from "./pages/Posts";
+import Platforms from "./pages/Platforms";
+import Subscription from "./pages/Subscription";
+import Analytics from "./pages/Analytics";
+import Profile from "./pages/Profile";
+import AppShell from "./components/AppShell";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      <Route path="/" component={Home} />
+      <Route path="/compose" component={Compose} />
+      <Route path="/posts" component={Posts} />
+      <Route path="/platforms" component={Platforms} />
+      <Route path="/subscription" component={Subscription} />
+      <Route path="/analytics" component={Analytics} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
+      <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <Toaster
+            theme="dark"
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: "oklch(0.14 0.015 260)",
+                border: "1px solid oklch(0.22 0.02 260)",
+                color: "oklch(0.95 0.01 260)",
+              },
+            }}
+          />
+          <AppShell>
+            <Router />
+          </AppShell>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -8,6 +8,8 @@ import { registerChatRoutes } from "./chat";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { handleFileUpload } from "../uploadHandler";
+import { registerStripeRoutes } from "../stripeHandler";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -38,6 +40,10 @@ async function startServer() {
   registerOAuthRoutes(app);
   // Chat API with streaming and tool calling
   registerChatRoutes(app);
+  // File upload handler
+  app.post("/api/upload", handleFileUpload);
+  // Stripe webhook (must be before json middleware, registered here)
+  registerStripeRoutes(app);
   // tRPC API
   app.use(
     "/api/trpc",
